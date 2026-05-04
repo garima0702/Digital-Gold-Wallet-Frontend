@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Create Vendor Branch</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="app-header"><div class="logo-line"><div class="logo-coin">🪙</div><h1>Create Vendor Branch</h1></div><p class="subtle">Add a new vendor branch</p></header>
+<main class="page-shell">
+    <div class="topbar"><span class="member-pill">Member: <b th:text="${member}"></b></span><a class="btn btn-secondary" th:href="@{/vendor-branches(member=${member})}">← Back</a></div>
+    <section class="panel">
+        <div th:if="${errorMessage}" class="alert"><p th:text="${errorMessage}"></p></div>
+        <form class="form-grid" th:action="@{/vendor-branches/create}" method="post">
+            <input type="hidden" name="member" th:value="${member}" />
+            <div class="form-group"><label>Vendor</label><select name="vendorId" required><option value="">-- Select Vendor --</option><option th:each="vendor : ${vendors}" th:value="${vendor['vendorId']}" th:text="${vendor['vendorName']}" th:selected="${vendor['vendorId'] == selectedVendorId}"></option></select></div>
+            <div class="form-group"><label>Address</label><select name="addressId" required><option value="">-- Select Address --</option><option th:each="address : ${addresses}" th:value="${address['addressId']}" th:text="${address['addressText']}" th:selected="${address['addressId'] == selectedAddressId}"></option></select></div>
+            <div class="form-group"><label>Quantity</label><input type="number" step="0.01" name="quantity" th:value="${oldQuantity}" required></div>
+            <div class="actions"><button type="submit">Create Branch</button><a class="btn btn-secondary" th:href="@{/vendor-branches(member=${member})}">Cancel</a></div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

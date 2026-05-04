@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Digital Gold Wallet</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="app-header">
+    <div class="logo-line">
+        <div class="logo-coin">🪙</div>
+        <h1>Digital Gold Wallet</h1>
+    </div>
+    <p class="subtle">Capgemini Sprint Project</p>
+    <p class="subtle">Select a team member to explore their module</p>
+</header>
+
+<main class="page-shell">
+    <div class="team-grid">
+        <a class="member-card" href="/users?member=ashu">
+            <div class="photo-wrap"><img class="member-photo" src="/images/ashu.jpg" alt="Ashu"></div>
+            <div class="member-info"><div class="member-name">Ashu</div><div class="member-module">Users Module</div><div class="click-hint">▶ View Module</div></div>
+        </a>
+        <a class="member-card" href="/users?member=vinayak">
+            <div class="photo-wrap"><img class="member-photo" src="/images/vinayak.jpg" alt="Vinayak"></div>
+            <div class="member-info"><div class="member-name">Vinayak</div><div class="member-module">Users Module</div><div class="click-hint">▶ View Module</div></div>
+        </a>
+        <a class="member-card" href="/vendor-branches?member=shivam">
+            <div class="photo-wrap"><img class="member-photo" src="/images/shivam.jpg" alt="Shivam"></div>
+            <div class="member-info"><div class="member-name">Shivam</div><div class="member-module">Vendor Branches</div><div class="click-hint">▶ View Module</div></div>
+        </a>
+        <a class="member-card" href="/vendor-branches?member=shruti">
+            <div class="photo-wrap"><img class="member-photo" src="/images/shruti.jpg" alt="Shruti"></div>
+            <div class="member-info"><div class="member-name">Shruti</div><div class="member-module">Vendor Branches</div><div class="click-hint">▶ View Module</div></div>
+        </a>
+        <a class="member-card" href="/users?member=garima">
+            <div class="photo-wrap"><img class="member-photo" src="/images/garima.jpg" alt="Garima"></div>
+            <div class="member-info"><div class="member-name">Garima</div><div class="member-module">Users Module</div><div class="click-hint">▶ View Module</div></div>
+        </a>
+    </div>
+</main>
+
+<footer class="footer">DIGITAL GOLD WALLET · CAPGEMINI SPRINT</footer>
+
+</body>
+</html>

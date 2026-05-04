@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>User Details</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="app-header">
+    <div class="logo-line">
+        <div class="logo-coin">🪙</div>
+        <h1>User Details</h1>
+    </div>
+    <p class="subtle">Complete user information</p>
+</header>
+<main class="page-shell">
+    <div class="topbar">
+        <span class="member-pill">Member: <b th:text="${member}"></b></span>
+        <a class="btn btn-secondary" th:href="@{/users(member=${member})}">← Back to Users</a>
+    </div>
+
+    <!-- Basic User Info -->
+    <section class="panel">
+        <h2>Basic User Info</h2>
+        <div class="table-wrap">
+            <table class="info-table">
+                <tr><th>User ID</th><td th:text="${user['userId']}"></td></tr>
+                <tr><th>Name</th><td th:text="${user['name']}"></td></tr>
+                <tr><th>Email</th><td th:text="${user['email']}"></td></tr>
+                <tr><th>Balance</th><td th:text="${user['balance']}"></td></tr>
+                <tr><th>Created At</th><td th:text="${user['createdAt']} ?: 'Not available'"></td></tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- Transaction History -->
+    <section class="panel" th:if="${transactions != null}">
+        <h2>Transaction History</h2>
+        <p class="empty-state" th:if="${#lists.isEmpty(transactions)}">No transaction history available for this user.</p>
+        <div class="table-wrap" th:if="${!#lists.isEmpty(transactions)}">
+            <table>
+                <tr><th>Transaction ID</th><th>Type</th><th>Status</th><th>Quantity</th><th>Amount</th><th>Created At</th></tr>
+                <tr th:each="tx : ${transactions}">
+                    <td th:text="${tx['transactionId']}"></td>
+                    <td th:text="${tx['transactionType']}"></td>
+                    <td th:text="${tx['transactionStatus']}"></td>
+                    <td th:text="${tx['quantity']}"></td>
+                    <td th:text="${tx['amount']}"></td>
+                    <td th:text="${tx['createdAt']}"></td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- Virtual Gold Holdings -->
+    <section class="panel" th:if="${holdings != null}">
+        <h2>Virtual Gold Holdings</h2>
+        <p class="empty-state" th:if="${#lists.isEmpty(holdings)}">No virtual gold holdings available for this user.</p>
+        <div class="table-wrap" th:if="${!#lists.isEmpty(holdings)}">
+			<table th:if="${!#lists.isEmpty(holdings)}">
+			    <tr>
+			        <th>Holding ID</th>
+			        <th>User Name</th>
+			        <th>Vendor Name</th>
+			        <th>Branch Address</th>
+			        <th>Quantity</th>
+			        <th>Created At</th>
+			    </tr>
+
+			    <tr th:each="h : ${holdings}">
+			        <td th:text="${h['holdingId']}"></td>
+			        <td th:text="${h['userName']}"></td>
+			        <td th:text="${h['vendorName']}"></td>
+			        <td th:text="${h['branchAddressText']}"></td>
+			        <td th:text="${h['quantity']}"></td>
+			        <td th:text="${h['createdAt']}"></td>
+			    </tr>
+			</table>
+        </div>
+    </section>
+
+    <!-- Payments -->
+    <section class="panel" th:if="${payments != null}">
+        <h2>Payments</h2>
+        <p class="empty-state" th:if="${#lists.isEmpty(payments)}">No payments available for this user.</p>
+        <div class="table-wrap" th:if="${!#lists.isEmpty(payments)}">
+            <table>
+                <tr><th>Payment ID</th><th>Amount</th><th>Method</th><th>Type</th><th>Status</th><th>Created At</th></tr>
+                <tr th:each="p : ${payments}">
+                    <td th:text="${p['paymentId']}"></td>
+                    <td th:text="${p['amount']}"></td>
+                    <td th:text="${p['paymentMethod']}"></td>
+                    <td th:text="${p['transactionType']}"></td>
+                    <td th:text="${p['paymentStatus']}"></td>
+                    <td th:text="${p['createdAt']}"></td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- Address Section -->
+    <section class="panel" th:if="${address != null}">
+        <h2>Address</h2>
+        <div class="table-wrap">
+            <table class="info-table">
+                <tr><th>Street</th><td th:text="${address['street']} ?: 'Not available'"></td></tr>
+                <tr><th>City</th><td th:text="${address['city']} ?: 'Not available'"></td></tr>
+                <tr><th>State</th><td th:text="${address['state']} ?: 'Not available'"></td></tr>
+                <tr><th>Postal Code</th><td th:text="${address['postalCode']} ?: 'Not available'"></td></tr>
+                <tr><th>Country</th><td th:text="${address['country']} ?: 'Not available'"></td></tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- Physical Gold Transactions (UPDATED) -->
+    <section class="panel" th:if="${physicalTransactions != null}">
+        <h2>Physical Gold Transactions</h2>
+        <p class="empty-state" th:if="${#lists.isEmpty(physicalTransactions)}">No physical gold transactions available for this user.</p>
+        <div class="table-wrap" th:if="${!#lists.isEmpty(physicalTransactions)}">
+            <table>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>User Name</th>
+                    <th>Quantity</th>
+                    <th>Delivery Address</th>
+                    <th>Branch Address</th>
+                    <th>Created At</th>
+                </tr>
+                <tr th:each="pt : ${physicalTransactions}">
+                    <td th:text="${pt['transactionId']}"></td>
+                    <td th:text="${pt['userName']}"></td>
+                    <td th:text="${pt['quantity']}"></td>
+                    <td th:text="${pt['deliveryAddressText']}"></td>
+                    <td th:text="${pt['branchAddressText']}"></td>
+                    <td th:text="${pt['createdAt']}"></td>
+                </tr>
+            </table>
+        </div>
+    </section>
+</main>
+</body>
+</html>
