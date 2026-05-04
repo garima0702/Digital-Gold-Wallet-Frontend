@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Vendor Branch Details</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="app-header">
+    <div class="logo-line">
+        <div class="logo-coin">🪙</div>
+        <h1>Vendor Branch Details</h1>
+    </div>
+    <p class="subtle">Branch and vendor information</p>
+</header>
+<main class="page-shell">
+    <div class="topbar">
+        <span class="member-pill">Member: <b th:text="${member}"></b></span>
+        <a class="btn btn-secondary" th:href="@{/vendor-branches(member=${member})}">← Back to Branches</a>
+    </div>
+
+    <!-- Vendor Info Section -->
+    <section class="panel">
+        <h2>Vendor Info</h2>
+        <div class="table-wrap">
+            <table class="info-table">
+                <tr><th>Branch ID</th><td th:text="${branch['branchId']}"></td></tr>
+                <tr><th>Vendor Name</th><td th:text="${vendor['vendorName']} ?: 'Not available'"></td></tr>
+                <tr><th>Description</th><td th:text="${vendor['description']} ?: 'Not available'"></td></tr>
+                <tr><th>Email</th><td th:text="${vendor['contactEmail']} ?: 'Not available'"></td></tr>
+                <tr><th>Current Gold Price</th><td th:text="${vendor['currentGoldPrice']} ?: 'Not available'"></td></tr>
+                <tr><th>Website URL</th><td th:text="${vendor['websiteUrl']} ?: 'Not available'"></td></tr>
+                <tr><th>Branch Quantity</th><td th:text="${branch['quantity']}"></td></tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- Physical Gold Holdings / Transactions (UPDATED) -->
+    <section class="panel" th:if="${physicalTransactions != null}">
+        <h2>Physical Gold Transactions</h2>
+        <p class="empty-state" th:if="${#lists.isEmpty(physicalTransactions)}">No physical gold data available for this branch.</p>
+        <div class="table-wrap" th:if="${!#lists.isEmpty(physicalTransactions)}">
+            <table>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>User Name</th>
+                    <th>Quantity</th>
+                    <th>Delivery Address</th>
+                    <th>Branch Address</th>
+                    <th>Created At</th>
+                </tr>
+                <tr th:each="pt : ${physicalTransactions}">
+                    <td th:text="${pt['transactionId']}"></td>
+                    <td th:text="${pt['userName']}"></td>
+                    <td th:text="${pt['quantity']}"></td>
+                    <td th:text="${pt['deliveryAddressText']}"></td>
+                    <td th:text="${pt['branchAddressText']}"></td>
+                    <td th:text="${pt['createdAt']}"></td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- Virtual Gold Holdings -->
+    <section class="panel" th:if="${holdings != null}">
+        <h2>Virtual Gold Holdings</h2>
+        <p class="empty-state" th:if="${#lists.isEmpty(holdings)}">No virtual gold holdings available for this branch.</p>
+        <div class="table-wrap" th:if="${!#lists.isEmpty(holdings)}">
+			<table th:if="${!#lists.isEmpty(holdings)}">
+			    <tr>
+			        <th>Holding ID</th>
+			        <th>User Name</th>
+			        <th>Vendor Name</th>
+			        <th>Branch Address</th>
+			        <th>Quantity</th>
+			        <th>Created At</th>
+			    </tr>
+
+			    <tr th:each="h : ${holdings}">
+			        <td th:text="${h['holdingId']}"></td>
+			        <td th:text="${h['userName']}"></td>
+			        <td th:text="${h['vendorName']}"></td>
+			        <td th:text="${h['branchAddressText']}"></td>
+			        <td th:text="${h['quantity']}"></td>
+			        <td th:text="${h['createdAt']}"></td>
+			    </tr>
+			</table>
+        </div>
+    </section>
+
+    <!-- Transaction History -->
+    <section class="panel" th:if="${transactions != null}">
+        <h2>Transaction History</h2>
+        <p class="empty-state" th:if="${#lists.isEmpty(transactions)}">No transaction history available for this branch.</p>
+        <div class="table-wrap" th:if="${!#lists.isEmpty(transactions)}">
+            <table>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
+                    <th>Created At</th>
+                </tr>
+                <tr th:each="tx : ${transactions}">
+                    <td th:text="${tx['transactionId']}"></td>
+                    <td th:text="${tx['transactionType']}"></td>
+                    <td th:text="${tx['transactionStatus']}"></td>
+                    <td th:text="${tx['quantity']}"></td>
+                    <td th:text="${tx['amount']}"></td>
+                    <td th:text="${tx['createdAt']}"></td>
+                </tr>
+            </table>
+        </div>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Users List</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="app-header">
+    <div class="logo-line">
+        <div class="logo-coin">🪙</div>
+        <h1>Users List</h1>
+    </div>
+    <p class="subtle">Manage Digital Gold Wallet users</p>
+</header>
+
+<main class="page-shell">
+
+    <div class="topbar">
+        <span class="member-pill">
+            Member: <b th:text="${member}"></b>
+        </span>
+
+        <div class="actions">
+            <a class="btn btn-primary" th:href="@{/users/create(member=${member})}">
+                + Create New User
+            </a>
+            <a class="btn btn-secondary" href="/">Home</a>
+        </div>
+    </div>
+
+    <section class="panel">
+
+        <form class="search-form" th:action="@{/users}" method="get">
+            <input type="hidden" name="member" th:value="${member}" />
+            <input type="hidden" name="page" value="0" />
+            <input type="hidden" name="size" th:value="${size}" />
+
+            <select name="searchType">
+                <option value="name" th:selected="${searchType == 'name'}">Name</option>
+                <option value="city" th:selected="${searchType == 'city'}">City</option>
+                <option value="state" th:selected="${searchType == 'state'}">State</option>
+            </select>
+
+            <input type="text"
+                   name="keyword"
+                   placeholder="Enter value"
+                   th:value="${keyword}">
+
+            <button type="submit">Find</button>
+
+            <a class="btn btn-secondary"
+               th:href="@{/users(member=${member}, size=${size})}">
+                Reset
+            </a>
+        </form>
+
+        <p class="subtle">
+            Total Records:
+            <b th:text="${totalElements}"></b>
+        </p>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Balance</th>
+                    <th>Details</th>
+                    <th>Update</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user['userId']}"></td>
+                    <td th:text="${user['name']}"></td>
+                    <td th:text="${user['email']}"></td>
+                    <td th:text="${user['balance']}"></td>
+
+                    <td>
+                        <a class="btn-link"
+                           th:href="@{'/users/' + ${user['userId']}(member=${member})}">
+                            View
+                        </a>
+                    </td>
+
+                    <td>
+                        <a class="btn-link"
+                           th:href="@{'/users/update/' + ${user['userId']}(member=${member})}">
+                            Update
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="topbar" style="margin-top: 20px;">
+            <div>
+                <span class="member-pill">
+                    Page <b th:text="${currentPage + 1}"></b>
+                    of <b th:text="${totalPages}"></b>
+                </span>
+            </div>
+
+            <div class="actions">
+                <a class="btn btn-secondary"
+                   th:if="${hasPrevious}"
+                   th:href="@{/users(member=${member}, searchType=${searchType}, keyword=${keyword}, page=${currentPage - 1}, size=${size})}">
+                    Previous
+                </a>
+
+                <span class="btn btn-secondary" th:if="${!hasPrevious}">
+                    Previous
+                </span>
+
+                <a class="btn btn-secondary"
+                   th:if="${hasNext}"
+                   th:href="@{/users(member=${member}, searchType=${searchType}, keyword=${keyword}, page=${currentPage + 1}, size=${size})}">
+                    Next
+                </a>
+
+                <span class="btn btn-secondary" th:if="${!hasNext}">
+                    Next
+                </span>
+            </div>
+        </div>
+
+        <form class="search-form" th:action="@{/users}" method="get">
+            <input type="hidden" name="member" th:value="${member}" />
+            <input type="hidden" name="searchType" th:value="${searchType}" />
+            <input type="hidden" name="keyword" th:value="${keyword}" />
+            <input type="hidden" name="page" value="0" />
+
+            <label>Records per page:</label>
+
+            <select name="size" onchange="this.form.submit()">
+                <option value="5" th:selected="${size == 5}">5</option>
+                <option value="10" th:selected="${size == 10}">10</option>
+                <option value="20" th:selected="${size == 20}">20</option>
+                <option value="50" th:selected="${size == 50}">50</option>
+            </select>
+        </form>
+
+    </section>
+
+</main>
+
+</body>
+</html>

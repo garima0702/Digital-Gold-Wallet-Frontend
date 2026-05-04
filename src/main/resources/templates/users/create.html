@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Create User</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="app-header">
+    <div class="logo-line"><div class="logo-coin">🪙</div><h1>Create User</h1></div>
+    <p class="subtle">Add a new Digital Gold Wallet user</p>
+</header>
+<main class="page-shell">
+    <div class="topbar">
+        <span class="member-pill">Member: <b th:text="${member}"></b></span>
+        <a class="btn btn-secondary" th:href="@{/users(member=${member})}">← Back</a>
+    </div>
+    <section class="panel">
+        <div th:if="${errorMessage}" class="alert"><p th:text="${errorMessage}"></p></div>
+        <form class="form-grid" th:action="@{/users/create}" method="post">
+            <input type="hidden" name="member" th:value="${member}" />
+            <div class="form-group"><label>Name</label><input type="text" name="name" th:value="${oldName}" required></div>
+            <div class="form-group"><label>Email</label><input type="email" name="email" th:value="${oldEmail}" required></div>
+            <div class="form-group"><label>Balance</label><input type="number" step="0.01" name="balance" th:value="${oldBalance}" required></div>
+            <div class="actions"><button type="submit">Create User</button><a class="btn btn-secondary" th:href="@{/users(member=${member})}">Cancel</a></div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

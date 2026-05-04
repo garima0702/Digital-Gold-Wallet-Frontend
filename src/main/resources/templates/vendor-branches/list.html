@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Vendor Branches</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="app-header">
+    <div class="logo-line">
+        <div class="logo-coin">🪙</div>
+        <h1>Vendor Branches</h1>
+    </div>
+    <p class="subtle">Manage vendor branch inventory</p>
+</header>
+
+<main class="page-shell">
+
+    <div class="topbar">
+        <span class="member-pill">
+            Member: <b th:text="${member}"></b>
+        </span>
+
+        <div class="actions">
+            <a class="btn btn-primary" th:href="@{/vendor-branches/create(member=${member})}">
+                + Create New Branch
+            </a>
+            <a class="btn btn-secondary" href="/">Home</a>
+        </div>
+    </div>
+
+    <section class="panel">
+
+        <div th:if="${errorMessage}" class="alert">
+            <p th:text="${errorMessage}"></p>
+        </div>
+
+        <form class="search-form" th:action="@{/vendor-branches}" method="get">
+            <input type="hidden" name="member" th:value="${member}" />
+            <input type="hidden" name="page" value="0" />
+            <input type="hidden" name="size" th:value="${size}" />
+
+            <select name="searchType">
+                <option value="vendorId" th:selected="${searchType == 'vendorId'}">Vendor ID</option>
+                <option value="city" th:selected="${searchType == 'city'}">City</option>
+                <option value="state" th:selected="${searchType == 'state'}">State</option>
+            </select>
+
+            <input type="text"
+                   name="keyword"
+                   placeholder="Enter value"
+                   th:value="${keyword}">
+
+            <button type="submit">Find</button>
+
+            <a class="btn btn-secondary"
+               th:href="@{/vendor-branches(member=${member}, size=${size})}">
+                Reset
+            </a>
+        </form>
+
+        <p class="subtle">
+            Total Records:
+            <b th:text="${totalElements}"></b>
+        </p>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>Branch ID</th>
+                    <th>Vendor Name</th>
+                    <th>Address</th>
+                    <th>Quantity</th>
+                    <th>Details</th>
+                    <th>Update</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="branch : ${branches}">
+                    <td th:text="${branch['branchId']}"></td>
+                    <td th:text="${branch['vendorName']}"></td>
+                    <td th:text="${branch['addressText']}"></td>
+                    <td th:text="${branch['quantity']}"></td>
+
+                    <td>
+                        <a class="btn-link"
+                           th:href="@{'/vendor-branches/' + ${branch['branchId']}(member=${member})}">
+                            View
+                        </a>
+                    </td>
+
+                    <td>
+                        <a class="btn-link"
+                           th:href="@{'/vendor-branches/update/' + ${branch['branchId']}(member=${member})}">
+                            Update
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="topbar" style="margin-top: 20px;">
+            <div>
+                <span class="member-pill">
+                    Page <b th:text="${currentPage + 1}"></b>
+                    of <b th:text="${totalPages}"></b>
+                </span>
+            </div>
+
+            <div class="actions">
+                <a class="btn btn-secondary"
+                   th:if="${hasPrevious}"
+                   th:href="@{/vendor-branches(member=${member}, searchType=${searchType}, keyword=${keyword}, page=${currentPage - 1}, size=${size})}">
+                    Previous
+                </a>
+
+                <span class="btn btn-secondary" th:if="${!hasPrevious}">
+                    Previous
+                </span>
+
+                <a class="btn btn-secondary"
+                   th:if="${hasNext}"
+                   th:href="@{/vendor-branches(member=${member}, searchType=${searchType}, keyword=${keyword}, page=${currentPage + 1}, size=${size})}">
+                    Next
+                </a>
+
+                <span class="btn btn-secondary" th:if="${!hasNext}">
+                    Next
+                </span>
+            </div>
+        </div>
+
+        <form class="search-form" th:action="@{/vendor-branches}" method="get">
+            <input type="hidden" name="member" th:value="${member}" />
+            <input type="hidden" name="searchType" th:value="${searchType}" />
+            <input type="hidden" name="keyword" th:value="${keyword}" />
+            <input type="hidden" name="page" value="0" />
+
+            <label>Records per page:</label>
+
+            <select name="size" onchange="this.form.submit()">
+                <option value="5" th:selected="${size == 5}">5</option>
+                <option value="10" th:selected="${size == 10}">10</option>
+                <option value="20" th:selected="${size == 20}">20</option>
+                <option value="50" th:selected="${size == 50}">50</option>
+            </select>
+        </form>
+
+    </section>
+
+</main>
+
+</body>
+</html>
