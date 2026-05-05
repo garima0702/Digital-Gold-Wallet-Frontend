@@ -20,27 +20,30 @@ public class PaymentService {
 
     public List<Map<String, Object>> getPaymentsByUserId(Integer userId) {
 
-        Map response = restTemplate.getForObject(
-                baseUrl + "/payments/search/findByUserid?userId=" + userId,
-                Map.class
-        );
+        try {
+            Map response = restTemplate.getForObject(
+                    baseUrl + "/payments/search/findByUserid?userId=" + userId,
+                    Map.class
+            );
 
-        if (response == null || response.get("_embedded") == null) {
+            if (response == null || response.get("_embedded") == null) {
+                return new ArrayList<>();
+            }
+
+            Map embedded = (Map) response.get("_embedded");
+
+            List<Map<String, Object>> payments =
+                    (List<Map<String, Object>>) embedded.getOrDefault("paymentses", new ArrayList<>());
+
+            for (Map<String, Object> payment : payments) {
+                payment.put("paymentId", extractIdFromSelfLink(payment));
+            }
+
+            return payments;
+
+        } catch (Exception e) {
             return new ArrayList<>();
         }
-
-        Map embedded = (Map) response.get("_embedded");
-
-        // 🔥 FIX: correct key = paymentses
-        List<Map<String, Object>> payments =
-                (List<Map<String, Object>>) embedded.getOrDefault("paymentses", new ArrayList<>());
-
-        // 🔥 Extract paymentId from self link
-        for (Map<String, Object> payment : payments) {
-            payment.put("paymentId", extractIdFromSelfLink(payment));
-        }
-
-        return payments;
     }
 
     private Integer extractIdFromSelfLink(Map<String, Object> entity) {

@@ -97,7 +97,8 @@ public class UserPageController {
                 model.addAttribute("payments",
                         paymentService.getPaymentsByUserId(userId));
 
-                model.addAttribute("address", getAddressFromEntityLinks(user));
+                model.addAttribute("address",
+                        getAddressFromEntityLinks(user));
                 break;
 
             case "garima":
@@ -151,23 +152,28 @@ public class UserPageController {
 
     private Map<String, Object> getAddressFromEntityLinks(Map<String, Object> entity) {
 
-        if (entity == null || entity.get("_links") == null) {
+        try {
+            if (entity == null || entity.get("_links") == null) {
+                return null;
+            }
+
+            Map<String, Object> links = (Map<String, Object>) entity.get("_links");
+
+            if (links.get("address") == null) {
+                return null;
+            }
+
+            Map<String, Object> addressLink = (Map<String, Object>) links.get("address");
+            String addressUrl = (String) addressLink.get("href");
+
+            if (addressUrl == null || addressUrl.isBlank()) {
+                return null;
+            }
+
+            return addressService.getAddressByUrl(addressUrl);
+
+        } catch (Exception e) {
             return null;
         }
-
-        Map<String, Object> links = (Map<String, Object>) entity.get("_links");
-
-        if (links.get("address") == null) {
-            return null;
-        }
-
-        Map<String, Object> addressLink = (Map<String, Object>) links.get("address");
-        String addressUrl = (String) addressLink.get("href");
-
-        if (addressUrl == null || addressUrl.isBlank()) {
-            return null;
-        }
-
-        return addressService.getAddressByUrl(addressUrl);
     }
 }
