@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,18 +10,20 @@ public class AddressService {
 
     private final RestTemplate restTemplate;
 
-    @Value("${backend.base-url}")
-    private String baseUrl;
-
     public AddressService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
     public Map<String, Object> getAddressByUrl(String addressUrl) {
-        return restTemplate.getForObject(addressUrl, Map.class);
-    }
+        try {
+            if (addressUrl == null || addressUrl.isBlank()) {
+                return null;
+            }
 
-    public Map<String, Object> getAddressById(Integer addressId) {
-        return restTemplate.getForObject(baseUrl + "/address/" + addressId, Map.class);
+            return restTemplate.getForObject(addressUrl, Map.class);
+
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

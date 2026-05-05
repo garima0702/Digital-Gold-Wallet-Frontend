@@ -102,6 +102,9 @@
     <!-- Address Section -->
     <section class="panel" th:if="${address != null}">
         <h2>Address</h2>
+		<p class="empty-state" th:if="${member == 'vinayak' and address == null}">
+		    No address available for this user.
+		</p>
         <div class="table-wrap">
             <table class="info-table">
                 <tr><th>Street</th><td th:text="${address['street']} ?: 'Not available'"></td></tr>
